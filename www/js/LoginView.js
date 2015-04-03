@@ -24,7 +24,7 @@ var LoginView = function (service) {
                 facebookConnectPlugin.browserInit(appId);
             }
             var checkFB = function(){
-                if (typeof facebookConnectPlugin == 'undefined'){
+                if (typeof facebookConnectPlugin != 'undefined'){
                     alert('About to Login...');
                     facebookConnectPlugin.login( ["email"],
                           function (response) { 
@@ -42,6 +42,7 @@ var LoginView = function (service) {
                     setTimeout(checkFB, 500);
                 }
             }
+            checkFB();
         }
         login();
 
