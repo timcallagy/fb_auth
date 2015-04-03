@@ -87,6 +87,28 @@
             };
         }
 
+        function login() {
+            alert('Login called...');
+            if (!window.cordova) {
+                var appId = prompt("Enter FB Application ID", "");
+                facebookConnectPlugin.browserInit(appId);
+            }
+            alert('About to Login...');
+            facebookConnectPlugin.login( ["email"],
+                    function (response) { 
+                        alert(JSON.stringify(response)) 
+                        alert('logged in');
+                        window.location="#home/";
+                    },
+                    function (response) { 
+                        alert(JSON.stringify(response)) 
+                        alert('not logged in');
+                        self.render();
+                    });
+        }
+        login();
+
+
     }, false);
 
     // This function must be structured this way to allow the button to fire multiple click events.

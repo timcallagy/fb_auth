@@ -18,26 +18,6 @@ var LoginView = function (service) {
                 console.log('Error');
             }
         });
-        function login() {
-            alert('Login called...');
-            if (!window.cordova) {
-                var appId = prompt("Enter FB Application ID", "");
-                facebookConnectPlugin.browserInit(appId);
-            }
-            alert('About to Login...');
-            facebookConnectPlugin.login( ["email"],
-                    function (response) { 
-                        alert(JSON.stringify(response)) 
-                        alert('logged in');
-                        window.location="#home/";
-                    },
-                    function (response) { 
-                        alert(JSON.stringify(response)) 
-                        alert('not logged in');
-                        self.render();
-                    });
-        }
-        login();
 
         /*
            openFB.init({appId: '1533444716908405'});
