@@ -25,6 +25,8 @@
 <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 <link rel="stylesheet" type="text/css" href="css/index.css" />
+<link rel="stylesheet" href="css/ratchet.css" type="text/css" >
+<link rel="stylesheet" href="css/styles.css" type="text/css">
 <title>Hello World</title>
 </head>
 <body>
@@ -34,14 +36,14 @@
         <p class="event listening">Connecting to Device</p>
         <p class="event received">Device is Ready</p>
     </div>
-    <div class="event listening button" onclick="login();">Login with Facebook</div>
-    <div class="event listening button" onclick="showDialog();">Show Dialog with Facebook</div>
-    <div class="event listening button" onclick="apiTest();">Test API with Facebook</div>
-    <div class="event listening button" onclick="getAccessToken();">Get access token with Facebook</div>
-    <div class="event listening button" onclick="logPurchase();">Log Purchase Event</div>
-    <div class="event listening button" onclick="logEvent();">Log Regular Event</div>
-    <div class="event listening button" onclick="getStatus();">Get login status with Facebook</div>
-    <div class="event listening button" onclick="logout();">Logout with Facebook</div>
+    <div class="btn btn-block" onclick="login();">Login with Facebook</div>
+    <div class="btn btn-block" onclick="showDialog();">Show Dialog with Facebook</div>
+    <div class="btn btn-block" onclick="apiTest();">Test API with Facebook</div>
+    <div class="btn btn-block" onclick="getAccessToken();">Get access token with Facebook</div>
+    <div class="btn btn-block" onclick="logPurchase();">Log Purchase Event</div>
+    <div class="btn btn-block" onclick="logEvent();">Log Regular Event</div>
+    <div class="btn btn-block" onclick="getStatus();">Get login status with Facebook</div>
+    <div class="btn btn-block" onclick="logout();">Logout with Facebook</div>
 </div>
 <div id="fb-root"></div>
 <script type="text/javascript" src="cordova.js"></script>
