@@ -23,18 +23,23 @@ var LoginView = function (service) {
                 var appId = prompt("Enter FB Application ID", "");
                 facebookConnectPlugin.browserInit(appId);
             }
-            alert('About to Login...');
-            facebookConnectPlugin.login( ["email"],
-                    function (response) { 
-                        alert(JSON.stringify(response)) 
-                        alert('logged in');
-                        window.location="#home/";
-                    },
-                    function (response) { 
-                        alert(JSON.stringify(response)) 
-                        alert('not logged in');
-                        self.render();
-                    });
+            var checkFB = function(){
+                if (typeof facebookConnectPlugin == 'undefined'){
+                    alert('About to Login...');
+                    facebookConnectPlugin.login( ["email"],
+                          function (response) { 
+                            alert(JSON.stringify(response)) 
+                            alert('logged in');
+                            window.location="#home/";
+                           },
+                            function (response) { 
+                            alert(JSON.stringify(response)) 
+                            alert('not logged in');
+                            self.render();
+                          });
+                } else {
+                    setTimeout(checkFB, 500);
+                }
         }
         login();
 
