@@ -3,14 +3,18 @@ var HomeView = function (service) {
     self = this;
 
     var getStatus = function () {
-        alert("Getting login status");
         facebookConnectPlugin.getLoginStatus(
                 function (response) {
                     facebookConnectPlugin.api('/me', ["id", "first_name", "last_name"],
                         function(response) {
                             console.log('error');
+                            console.log(response);
                             alert("ERROR 1");
-                            alert(response);
+                            userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
+                            window.localStorage.setItem("id", response.id);
+                            window.localStorage.setItem("my_name", response.first_name + " " + response.last_name);
+                            self.$el.html(self.template(response));
+                            return self;
                         },
                         function(response) {
                             console.log(response);
