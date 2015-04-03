@@ -1,6 +1,31 @@
 // We use an "Immediate Function" to initialize the application to avoid leaving anything behind in the global scope
 (function () {
 
+    /* --------------------------------- Event Registration -------------------------------- */
+    document.addEventListener('deviceready', function() {
+
+        // These lines fix the iOS7 status bar problem
+        StatusBar.overlaysWebView( false );
+        StatusBar.backgroundColorByHexString('#ffffff');
+        StatusBar.styleDefault();       
+
+        // This makes the app react faster to clicks
+        FastClick.attach(document.body);
+
+        if (navigator.notification) {
+            window.alert = function (message) {
+                navigator.notification.alert(
+                    message,    // message
+                    null,       // callback
+                    "Workshop", // title
+                    'OK'        // buttonName
+                    );
+            };
+        }
+
+    }, false);
+
+
     /* ---------------------------------- Local Variables ---------------------------------- */
     LoginView.prototype.template = Handlebars.compile($("#login-tpl").html());
     HomeView.prototype.template = Handlebars.compile($("#home-tpl").html());
@@ -64,53 +89,6 @@
         router.start();
 
     });
-
-    /* --------------------------------- Event Registration -------------------------------- */
-    document.addEventListener('deviceready', function() {
-
-        // These lines fix the iOS7 status bar problem
-        StatusBar.overlaysWebView( false );
-        StatusBar.backgroundColorByHexString('#ffffff');
-        StatusBar.styleDefault();       
-
-        // This makes the app react faster to clicks
-        FastClick.attach(document.body);
-
-        if (navigator.notification) {
-            window.alert = function (message) {
-                navigator.notification.alert(
-                    message,    // message
-                    null,       // callback
-                    "Workshop", // title
-                    'OK'        // buttonName
-                    );
-            };
-        }
-
-        function login() {
-            alert('Login called...');
-            if (!window.cordova) {
-                var appId = prompt("Enter FB Application ID", "");
-                facebookConnectPlugin.browserInit(appId);
-            }
-            alert('About to Login...');
-            facebookConnectPlugin.login( ["email"],
-                    function (response) { 
-                        alert(JSON.stringify(response)) 
-                        alert('logged in');
-                        window.location="#home/";
-                    },
-                    function (response) { 
-                        alert(JSON.stringify(response)) 
-                        alert('not logged in');
-                        self.render();
-                    });
-        }
-        login();
-
-
-    }, false);
-
     // This function must be structured this way to allow the button to fire multiple click events.
     $(function() {
         return $("body").on("click", "#add-gift-btn", function() {
