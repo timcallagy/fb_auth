@@ -5,9 +5,8 @@ var HomeView = function (service) {
     var getStatus = function () {
         facebookConnectPlugin.getLoginStatus(
                 function (response) {
-                    facebookConnectPlugin.api('/me',
+                    facebookConnectPlugin.api('/me', [],
                         function(response) {
-                            console.log('error');
                             console.log(response);
                             alert("Me API call - SUCCESS");
                             userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
