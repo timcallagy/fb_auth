@@ -5,11 +5,11 @@ var HomeView = function (service) {
     var getStatus = function () {
         facebookConnectPlugin.getLoginStatus(
                 function (response) {
-                    facebookConnectPlugin.api('/me', ["first_name", "last_name"],
+                    facebookConnectPlugin.api('/me',
                         function(response) {
                             console.log('error');
                             console.log(response);
-                            alert("ERROR 1");
+                            alert("Me API call - SUCCESS");
                             userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
                             window.localStorage.setItem("id", response.id);
                             window.localStorage.setItem("my_name", response.first_name + " " + response.last_name);
@@ -18,12 +18,7 @@ var HomeView = function (service) {
                         },
                         function(response) {
                             console.log(response);
-                            alert("Me API call - SUCCESS");
-                            userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
-                            window.localStorage.setItem("id", response.id);
-                            window.localStorage.setItem("my_name", response.first_name + " " + response.last_name);
-                            self.$el.html(self.template(response));
-                            return self;
+                            alert("ERROR 1");
                         }
                         );
                 },
