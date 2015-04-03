@@ -1,108 +1,493 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
 <head>
-<meta charset="utf-8" />
-<meta name="format-detection" content="telephone=no" />
-<meta name="msapplication-tap-highlight" content="no" />
-<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-<link rel="stylesheet" type="text/css" href="css/index.css" />
+<meta charset="utf-8">
+<title>openFB Sample</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet" href="css/ratchet.css" type="text/css" >
 <link rel="stylesheet" href="css/styles.css" type="text/css">
-<title>Hello World</title>
+<link href="css/pageslider.css" rel="stylesheet">
 </head>
 <body>
-<div class="app">
-    <h1>Apache Cordova</h1>
-    <div id="deviceready" class="blink">
-        <p class="event listening">Connecting to Device</p>
-        <p class="event received">Device is Ready</p>
-    </div>
-    <div class="btn btn-block" onclick="login();">Login with Facebook</div>
-    <div class="btn btn-block" onclick="showDialog();">Show Dialog with Facebook</div>
-    <div class="btn btn-block" onclick="apiTest();">Test API with Facebook</div>
-    <div class="btn btn-block" onclick="getAccessToken();">Get access token with Facebook</div>
-    <div class="btn btn-block" onclick="logPurchase();">Log Purchase Event</div>
-    <div class="btn btn-block" onclick="logEvent();">Log Regular Event</div>
-    <div class="btn btn-block" onclick="getStatus();">Get login status with Facebook</div>
-    <div class="btn btn-block" onclick="logout();">Logout with Facebook</div>
+
+<!-- %%%%%%%%%%%%%   LOGIN   %%%%%%%%%%%%%%%% -->
+<script id="login-tpl" type="text/template">
+<div class="content back-img">
+<div id="logo" style="height:100%;top:5%;left:25%;right:25%;text-align: center; position: fixed;" >
+<!--<button class="btn btn-outlined btn-white"><h1>&nbsp;&nbsp;GiftMe&nbsp;&nbsp;</h1></button> -->
+<h1>&nbsp;&nbsp;GiftMe&nbsp;&nbsp;</h1>
 </div>
-<div id="fb-root"></div>
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="js/facebookConnectPlugin.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript">
-var login = function () {
-if (!window.cordova) {
-var appId = prompt("Enter FB Application ID", "");
-facebookConnectPlugin.browserInit(appId);
-}
-facebookConnectPlugin.login( ["email"],
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
-var showDialog = function () {
-facebookConnectPlugin.showDialog( { method: "feed" },
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
-var apiTest = function () {
-facebookConnectPlugin.api( "me/?fields=id,email", ["user_birthday"],
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
-var logPurchase = function () {
-facebookConnectPlugin.logPurchase(1.99, "USD",
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
-var logEvent = function () {
-// For more information on AppEvent param structure see
-// https://developers.facebook.com/docs/ios/app-events
-// https://developers.facebook.com/docs/android/app-events
-facebookConnectPlugin.logEvent("Purchased",
-{
-NumItems: 1,
-Currency: "USD",
-ContentType: "shoes",
-ContentID: "HDFU-8452"
-}, null,
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
-var getAccessToken = function () {
-facebookConnectPlugin.getAccessToken(
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
-var getStatus = function () {
-facebookConnectPlugin.getLoginStatus(
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
-var logout = function () {
-facebookConnectPlugin.logout(
-function (response) { alert(JSON.stringify(response)) },
-function (response) { alert(JSON.stringify(response)) });
-}
+<div id="logo" style="height:100%;top:80%;left:5%;right:5%;text-align: center; position: fixed;" >
+<a href="#home/"><button class="btn btn-primary btn-block">Login with Facebook</button></a>
+</div>
+</div>
+
 </script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+
+<!-- %%%%%%%%%%%%   HOME   %%%%%%%%%%%%%%%%% -->
+<script id="home-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a href="#" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+<div class="content content-padded">
+
+<div class="text-center">
+<ul class="table-view">
+  <li class="table-view-cell media">
+      <img class="media-object emp-pic" src="http://graph.facebook.com/{{ id }}/picture?width=150&height=150"><br>
+      <div class="media-body">
+          Hey {{ first_name }}!
+          <p>Welcome to GiftMe</p>
+      </div>
+  </li>
+</ul>
+</div>
+<a href="#wishlist/"><button class="btn btn-purple btn-block "><span class="icon icon-star-filled"></span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+My Wishlist
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="icon icon-right-nav"></span></button></a>
+
+<a href="#friends/"><button class="btn btn-cyan btn-block "><span class="icon icon-person"></span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+My Friends 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="icon icon-right-nav"></span></button></a>
+<br>
+<div class="text-center">
+    <h4>Invite your friends to create a wishlist!</h4>
+<a href="#friendsPopover"><img src="img/add_friend2.jpeg"/></a>
+</div>
+
+</div>
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+
+<!-- %%%%%%%%%%%%%%%   WISHLIST   %%%%%%%%%%%%%% -->
+<script id="wishlist-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a href="#home/" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+<div class="bar bar-standard bar-header-secondary">
+<a href="#addGift/"><button class="btn btn-positive btn-block "><span class="icon icon-plus"></span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Add item 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span class="icon icon-right-nav"></span></button></a>
+</div>
+
+<div class="content content-padded">
+   <ul class="table-view">
+        {{#each this}}
+        <li id="gift-{{this.pk}}" class="table-view-cell media">
+                <img class="media-object pull-left crop" src="{{this.fields.pic}}">
+                <div class="media-body">
+                    <a href="{{this.fields.url}}"> 
+                        {{this.fields.name}}
+                    </a>
+                    <p>Price: ${{ this.fields.price }}</p>
+                        <p>Crowfunded: ${{ this.fields.crowdfunded }}</p>
+                    {{#check_if_zero this.fields.crowdfunded}}
+                        <form id="delete-gift{{this.pk}}-form" action="#" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                        </form>
+                        <button id="delete-gift{{this.pk}}-btn" class="btn btn-negative" onclick="delete_gift({{this.pk}})"=>Delete</button>
+                    {{else}}
+                        <a href="#contributions/{{ this.pk }}/"><button class="btn btn-primary">See Contributions</button></a>
+                    {{/check_if_zero}}
+                </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+<!-- %%%%%%%%%%%%%%%   ADD ITEM   %%%%%%%%%%%%%% -->
+<script id="add-item-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a href="#wishlist/" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+
+<div class="content content-padded">
+<br>
+<h4 class="text-center">Add an Item</h4>
+<form id="add-gift-form" action="" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+<p>Name:</>
+  <input id="name" name="name" type="text" placeholder="e.g. Sportmax Pro Inline Roller Skates">
+<p>Link:</>
+  <input id="url" name="url" type="text" placeholder="e.g. http://www.amazon.co.uk/Kingdom-Sportmax-Inline-Roller-Skates/dp/B00PZ1TWU8/ref=sr_1_4?ie=UTF8&qid=1426610093&sr=8-4&keywords=rollerblades">
+
+    <button id="price-error" class="btn btn-outlined btn-negative" style="display:none;">Error! You must enter a number in the field below.</button>
+<p>Approximate Price (US$):</p>
+  <input id="price" name="price" type="text" placeholder="e.g. 50">
+  <input id="owner_id" name="owner_id" type="hidden" value={{ id }}>
+</form>
+<button id="add-gift-btn" class="btn btn-positive btn-block">Add</button>
+</div>
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+<!-- %%%%%%%%%%%%%%%   CONTRIBUTIONS   %%%%%%%%%%%%%% -->
+<script id="contributions-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a href="#wishlist/" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+
+<div class="content content-padded">
+<ul class="table-view">
+        <li class="table-view-cell media">
+                <img class="media-object pull-left crop" src="{{gift.fields.pic}}">
+                <br>
+                <div class="media-body">{{gift.fields.name}}</div>
+                <div class="media-body">Price: US$ {{gift.fields.price}}</div>
+                <div class="media-body">Crowdfunded so far: US$ {{gift.fields.crowdfunded}}</div>
+        </li>
+        {{#each contributions}}
+        <li id="{{pk}}" class="table-view-cell media">
+                <img class="media-object pull-left" src="http://graph.facebook.com/{{ fields.contributor_id }}/picture?type=small">
+                <div class="media-body">
+                    <p><strong>{{ fields.contributor_name }} contributed ${{ fields.amount }}!</strong></p>
+                    <p>{{ fields.message }}</p>
+                    <p>{{ fields.gift.name }}</p>
+                </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+<!-- %%%%%%%%%%%%%%%   FRIENDS   %%%%%%%%%%%%%% -->
+<script id="friends-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a href="#home/" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+
+<div class="content content-padded">
+<div class="text-center">
+<br>
+<a href="#friendsPopover"><img src="img/add_friend2.jpeg"/></a>
+    <h4>Invite MORE friends to create wishlists!</h4>
+</div>
+   <ul class="table-view">
+        {{#each this}}
+        <li class="table-view-cell media">
+            <a href="#friend-wishlist/{{ id }}/" class="navigate-right"> 
+                <img class="media-object pull-left" src="http://graph.facebook.com/{{ id }}/picture?type=small"><br>
+                <div class="media-body">
+                    Name: {{name}}
+                </div>
+            </a>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+<!-- %%%%%%%%%%%%%%%   FRIEND WISHLIST  %%%%%%%%%%%%%% -->
+<script id="friend-wishlist-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a href="#friends/" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+
+<div class="content content-padded">
+   <ul class="table-view">
+        <li class="table-view-cell media">
+                <img class="media-object pull-left" src="http://graph.facebook.com/{{ id }}/picture?type=small"><br>
+                <div class="media-body">
+                    {{friend.name}}'s Wishlist
+                </div>
+        </li>
+        {{#each gifts}}
+        <li class="table-view-cell media">
+                <img class="media-object pull-left crop" src="{{fields.pic}}">
+                <div class="media-body">
+                    <a href="{{fields.url}}"> 
+                        {{fields.name}}
+                    </a>
+                    <p>Price: ${{ fields.price }}</p>
+                    <p>Crowfunded: ${{ fields.crowdfunded }}</p>
+                    <a href="#pay-page/{{ fields.owner_id }}/{{ pk }}/"><button class="btn btn-primary">Chip In</button></a>
+                </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+<!-- %%%%%%%%%%%%%%%   PAY PAGE  %%%%%%%%%%%%%% -->
+<script id="pay-page-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a id="back-btn" href="#friend-wishlist/{{ id }}/" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+
+<div class="content content-padded">
+<ul class="table-view">
+        <li class="table-view-cell media">
+                <img class="media-object pull-left crop" src="{{gift.pic}}">
+                <br>
+                <div class="media-body">{{gift.name}}</div>
+                <div class="media-body">Price: US$ {{gift.price}}</div>
+                <div class="media-body">Crowdfunded so far: US$ {{gift.crowdfunded}}</div>
+                <div class="media-body">Crowdfund it for {{friend.name}}!</div>
+        </li>
+</ul>
+<button id="success-btn" class="btn btn-positive btn-block" style="display:none;">SUCCESS!</button>
+<form id="pay-form" action="" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+
+
+    <button id="gift-message-error" class="btn btn-outlined btn-negative" style="display:none;">Message limit is 5000 characters</button>
+<textarea id="gift-message" name="gift-message" rows="4" cols="50" placeholder="Personal Message (optional)"></textarea>
+    <br>
+    <br>
+
+
+<table>
+<tr>
+<td>
+<p>Amount: &nbsp;&nbsp;&nbsp;&nbsp;</p>
+</td>
+<td>
+<select id="amount" class="input-row" name="amount">
+<option value="5">US$ 5.00</option>
+<option value="10">US$ 10.00</option>
+<option value="15">US$ 15.00</option>
+<option value="20">US$ 20.00</option>
+<option value="25">US$ 25.00</option>
+<option value="30">US$ 30.00</option>
+<option value="35">US$ 35.00</option>
+<option value="40">US$ 40.00</option>
+<option value="45">US$ 45.00</option>
+<option value="50">US$ 50.00</option>
+<option value="60">US$ 60.00</option>
+<option value="70">US$ 70.00</option>
+<option value="80">US$ 80.00</option>
+<option value="90">US$ 90.00</option>
+<option value="100">US$ 100.00</option>
+<option value="120">US$ 120.00</option>
+<option value="130">US$ 130.00</option>
+<option value="140">US$ 140.00</option>
+<option value="150">US$ 150.00</option>
+<option value="160">US$ 160.00</option>
+<option value="170">US$ 170.00</option>
+<option value="180">US$ 180.00</option>
+<option value="190">US$ 190.00</option>
+<option value="200">US$ 200.00</option>
+<option value="250">US$ 250.00</option>
+<option value="300">US$ 300.00</option>
+<option value="350">US$ 350.00</option>
+<option value="400">US$ 400.00</option>
+<option value="450">US$ 450.00</option>
+<option value="500">US$ 500.00</option>
+</select>
+</td>
+</tr>
+<tr>
+    <button id="payment-failed-msg" class="btn btn-outlined btn-negative" style="display:none;">Payment Failed!</button>
+    <button id="payment-error" class="btn btn-outlined btn-negative" style="display:none;"></button>
+</tr>
+<tr>
+<td>
+<p>Card Number:  &nbsp;&nbsp;&nbsp;&nbsp;</p>
+</td>
+<td>
+ <input id="card-number" name="card-number" type="text" placeholder="e.g. 1234567812345678">
+</td>
+</tr>
+
+<tr>
+<td>
+<p>CVC:</p>
+</td>
+<td>
+ <input id="card-cvc" name="card-cvc" type="text" placeholder="e.g. 123">
+</td>
+<tr>
+<td><p>Expiry: </p>
+</td>
+<td width="75%">
+<select id="expiry-month" class="input-row" name="expiry-month">
+<option value="01">January</option>
+<option value="02">February</option>
+<option value="03">March</option>
+<option value="04">April</option>
+<option value="05">May</option>
+<option value="06">June</option>
+<option value="07">July</option>
+<option value="08">August</option>
+<option value="09">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+</td>
+<td width="25%">
+<select id="expiry-year" class="input-row" name="expiry-year">
+<option value="2015">2015</option>
+<option value="2016">2016</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+<option value="2021">2021</option>
+<option value="2022">2022</option>
+<option value="2023">2023</option>
+<option value="2024">2024</option>
+</select>
+</td>
+</tr>
+</table>
+<input id="gift-pk" name="gift-pk" type="hidden" value="{{ pk }}">
+<input id="friend-id" type="hidden" value="{{ id }}">
+</form>
+<button id="pay-btn" class="btn btn-primary btn-block">Pay</button>
+<button id="processing-btn" class="btn btn-primary btn-block" style="display:none;" disabled>Processing...</button>
+<button id="success-btn" class="btn btn-positive btn-block" style="display:none;">SUCCESS!</button>
+
+</div>
+
+</script>
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+<!-- %%%%%%%%%%%%%%%   PAYMENT CONFIRMATION   %%%%%%%%%%%%%% -->
+<script id="payment-confirmation-tpl" type="text/template">
+<header class="bar bar-nav">
+<h2 class="title">GiftMe</h2>
+<a href="#home/" class="icon icon-left-nav pull-left"></a>
+<a href="#mypopover" class="icon icon-bars pull-right"></a>
+</header>
+
+<div class="content content-padded">
+<button id="success-btn" class="btn btn-positive btn-block"">SUCCESS!</button>
+<div class="text-center">
+<br>
+<p>You chipped in US${{ contribution.fields.amount}}</p>
+
+<br>
+<a href="#chipInInvitePopover"><img src="img/add_friend2.jpeg"/></a>
+<br>
+<br>
+<p>Do you know someone else who would like to chip in?</p>
+<a href="#chipInInvitePopover"><button class="btn btn-cyan btn-block ">Invite</button></a>
+
+</div>
+<br>
+<a href="#home/"><button class="btn btn-purple btn-block ">Home</button></a>
+</div>
+
+<div id="chipInInvitePopover" class="popover">
+    <ul class="table-view">
+        <li class="table-view-cell"><strong>Invite using</strong></li>
+        <li class="table-view-cell"><a href="sms:?body=Hi! We're crowdfunding {{ contribution.fields.gift_name }} for {{ friend.name }} using a cool app called GiftMe! Want to chip in? Get GiftMe for Android here: https://play.google.com/store/apps/details?id=co.giftmeapp.gift_me">SMS</a></li>
+        <li class="table-view-cell" onclick="send_whatsapp('Hi! We are crowdfunding {{ contribution.fields.gift_name }} for {{ friend.name }} using a cool app called GiftMe! Want to chip in? Get GiftMe for Android here:');">WhatsApp</li>
+        <li class="table-view-cell"><a href="mailto:?subject=Gift%20for%20{{friend.name}}&body=Hi!%20We%27re%20crowdfunding%20{{contribution.fields.gift_name}}%20for%20{{friend.name}}%20using%20a%20cool%20app%20called%20GiftMe!%20Want%20to%20chip%20in%3F%20Get%20GiftMe%20for%20Android%20here%3A%20https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dco.giftmeapp.gift_me">Email</a></li>
+    </ul>
+</div>
+
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+
+<!-- %%%%%%%%%%%%   MODALS   %%%%%%%%%%%%%%%%% -->
+<!--
+<div id="mypopover" class="popover">
+    <ul class="table-view">
+        <li class="table-view-cell"><strong>Options</strong></li>
+        <li class="table-view-cell">Settings</li>
+        <li class="table-view-cell"><a href="#">Logout</a></li>
+    </ul>
+</div>
+-->
+<div id="mypopover" class="popover">
+    <ul class="table-view">
+        <li class="table-view-cell"><strong>GiftMe v1.0</strong></li>
+        <li class="table-view-cell">Contact: timcallagy@gmail.com</li>
+    </ul>
+</div>
+
+
+<div id="friendsPopover" class="popover">
+    <ul class="table-view">
+        <li class="table-view-cell"><strong>Invite using</strong></li>
+        <li class="table-view-cell"><a href="sms:?body=Hi! Help me buy something for your birthday by creating a wishlist using GiftMe. You can also view my wishlist for gift ideas! Get GiftMe for Android: https://play.google.com/store/apps/details?id=co.giftmeapp.gift_me">SMS</a></li>
+       <!-- <li class="table-view-cell"><a href="whatsapp://send?text=Hi!%20Help%20me%20buy%20something%20for%20your%20birthday%20by%20creating%20a%20wishlist%20using%20GiftMe.%20%0AYou%20can%20also%20view%20my%20wishlist%20for%20gift%20ideas!%20%0AGet%20GiftMe%20for%20Android:%20https://play.google.com/store/apps/details?id=co.giftmeapp.gift_me!">WhatsApp</a></li> 
+        <li class="table-view-cell"><a href="whatsapp://send?text=Hi">WhatsApp</a></li>-->
+        <li class="table-view-cell" onclick="send_whatsapp('Hi! Help me buy you something nice by creating a wishlist using GiftMe. You can also view my wishlist for gift ideas! Get GiftMe for Android:');" >WhatsApp</li>
+        <li class="table-view-cell"><a href="mailto:?subject=GiftMe&body=Hi!%20Help%20me%20buy%20something%20for%20your%20birthday%20by%20creating%20a%20wishlist%20using%20GiftMe.%20%0AYou%20can%20also%20view%20my%20wishlist%20for%20gift%20ideas!%20%0AGet%20GiftMe%20for%20Android:%20https://play.google.com/store/apps/details?id=co.giftmeapp.gift_me!">Email</a></li>
+    </ul>
+</div>
+
+
+<div id="mymodal" class="modal">
+    <header class="bar bar-nav">
+        <a class="icon icon-close pull-right" href="#mymodal"></a>
+    </form>
+
+</div>
+
+</script>
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+<div id="fb-root"></div>
+<!--cordova.js is automatically injected by the Cordova build process-->
+<script src="cordova.js"></script>
+<script src="js/jquery.js"></script>
+<!--<script src="js/openfb.js"></script>-->
+<script type="text/javascript" src="js/facebookConnectPlugin.js"></script>
+<script src="js/pageslider.js"></script>
+<script src="js/router.js"></script>
+<script src="js/services/json/GiftService.js"></script>
+<script src="js/handlebars.js"></script>
+<script src="js/LoginView.js"></script>
+<script src="js/HomeView.js"></script>
+<script src="js/WishlistView.js"></script>
+<script src="js/FriendsView.js"></script>
+<script src="js/FriendWishlistView.js"></script>
+<script src="js/AddGiftView.js"></script>
+<script src="js/ContributionsView.js"></script>
+<script src="js/PayPageView.js"></script>
+<script src="js/PaymentConfirmationView.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="https://js.stripe.com/v2/"></script>
+<script src="js/app.js"></script>
+<script src="js/ratchet.min.js"></script>
+
+
 </body>
 </html>
