@@ -6,7 +6,7 @@ var HomeView = function (service) {
         alert("Getting login status");
         facebookConnectPlugin.getLoginStatus(
                 function (response) {
-                    FB.api('/me',
+                    facebookConnectPlugin.api('/me',
                         function(response) {
                             console.log('error');
                             alert("ERROR 1");

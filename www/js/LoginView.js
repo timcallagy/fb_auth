@@ -26,11 +26,9 @@ var LoginView = function (service) {
                 if (typeof facebookConnectPlugin != 'undefined'){
                     facebookConnectPlugin.login( ["email"],
                           function (response) { 
-                            alert(JSON.stringify(response)) 
                             window.location="#home/";
                            },
                             function (response) { 
-                            alert(JSON.stringify(response)) 
                             self.render();
                           });
                 } else {
