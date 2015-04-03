@@ -40,6 +40,7 @@ var LoginView = function (service) {
                 } else {
                     setTimeout(checkFB, 500);
                 }
+            }
         }
         login();
 
