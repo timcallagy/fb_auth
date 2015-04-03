@@ -42,10 +42,10 @@
 
     service.initialize().done(function () {
         console.log("Service initialized");
-        router.addRoute('', function() {
+        router.addRoute('login/', function() {
             slider.slidePage(new LoginView().render().$el);
         });
-        router.addRoute('home/', function() {
+        router.addRoute('', function() {
             homeView = new HomeView();
             homeView.render();
             slider.slidePage(homeView.$el);

@@ -7,8 +7,6 @@ var HomeView = function (service) {
                 function (response) {
                     facebookConnectPlugin.api('/me', [],
                         function(response) {
-                            console.log(response);
-                            alert("Me API call - SUCCESS");
                             userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
                             window.localStorage.setItem("id", response.id);
                             window.localStorage.setItem("my_name", response.first_name + " " + response.last_name);
@@ -17,22 +15,45 @@ var HomeView = function (service) {
                         },
                         function(response) {
                             console.log(response);
-                            alert("ERROR 1");
                         }
                         );
                 },
                 function (response) { 
-                    alert("ERROR 2");
-                            alert(response);
                     console.log('error');
+                    alert(response);
+                    console.log(response);
                 });
     }
 
     this.initialize = function() {
         this.$el = $('<div/>');
+        function login() {
+            if (!window.cordova) {
+                var appId = prompt("Enter FB Application ID", "");
+                facebookConnectPlugin.browserInit(appId);
+            }
+            var checkFB = function(){
+                if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
+                    facebookConnectPlugin.login( ["email"],
+                          function (response) { 
+                              console.log('success!');
+                            //window.location="#home/";
+                            getStatus();
+                           },
+                            function (response) { 
+                            window.location="#login/";
+                          });
+                } else {
+                    console.log('FB NOT READY');
+                    setTimeout(checkFB, 500);
+                }
+            }
+            checkFB();
+        }
+        login();
     };
     this.render = function() {
-    getStatus();
+        //getStatus();
         /*
            openFB.api({
            path: '/me',

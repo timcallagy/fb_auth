@@ -17,6 +17,7 @@ var LoginView = function (service) {
                 console.log('Error');
             }
         });
+        /*
         function login() {
             if (!window.cordova) {
                 var appId = prompt("Enter FB Application ID", "");
@@ -26,6 +27,7 @@ var LoginView = function (service) {
                 if (typeof facebookConnectPlugin != 'undefined'){
                     facebookConnectPlugin.login( ["email"],
                           function (response) { 
+                              console.log('success!');
                             window.location="#home/";
                            },
                             function (response) { 
@@ -39,7 +41,7 @@ var LoginView = function (service) {
             checkFB();
         }
         login();
-
+        */
 
         /*
            openFB.init({appId: '1533444716908405'});
