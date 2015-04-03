@@ -38,6 +38,7 @@ var LoginView = function (service) {
                             self.render();
                           });
                 } else {
+                    console.log('FB NOT READY');
                     setTimeout(checkFB, 500);
                 }
             }
