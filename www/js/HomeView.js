@@ -3,11 +3,14 @@ var HomeView = function (service) {
     self = this;
 
     var getStatus = function () {
+        alert("Getting login status");
         facebookConnectPlugin.getLoginStatus(
                 function (response) {
                     FB.api('/me',
                         function(response) {
                             console.log('error');
+                            alert("ERROR 1");
+                            alert(response);
                         },
                         function(response) {
                             console.log(response);
@@ -20,6 +23,8 @@ var HomeView = function (service) {
                         );
                 },
                 function (response) { 
+                    alert("ERROR 2");
+                            alert(response);
                     console.log('error');
                 });
     }

@@ -18,23 +18,19 @@ var LoginView = function (service) {
             }
         });
         function login() {
-            alert('Login called...');
             if (!window.cordova) {
                 var appId = prompt("Enter FB Application ID", "");
                 facebookConnectPlugin.browserInit(appId);
             }
             var checkFB = function(){
                 if (typeof facebookConnectPlugin != 'undefined'){
-                    alert('About to Login...');
                     facebookConnectPlugin.login( ["email"],
                           function (response) { 
                             alert(JSON.stringify(response)) 
-                            alert('logged in');
                             window.location="#home/";
                            },
                             function (response) { 
                             alert(JSON.stringify(response)) 
-                            alert('not logged in');
                             self.render();
                           });
                 } else {
