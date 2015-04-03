@@ -9,7 +9,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <gap:plugin name="com.phonegap.plugins.facebookconnect">
+    <gap:plugin name="com.phonegap.plugins.facebookconnect" >
         <param name="APP_ID" value="1533444716908405" />
         <param name="APP_NAME" value="GiftMe" />
     </gap:plugin> 
