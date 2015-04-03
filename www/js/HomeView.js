@@ -6,7 +6,7 @@ var HomeView = function (service) {
         alert("Getting login status");
         facebookConnectPlugin.getLoginStatus(
                 function (response) {
-                    facebookConnectPlugin.api('/me',
+                    facebookConnectPlugin.api('/me', ["id"],
                         function(response) {
                             console.log('error');
                             alert("ERROR 1");
@@ -14,6 +14,7 @@ var HomeView = function (service) {
                         },
                         function(response) {
                             console.log(response);
+                            alert("Me API call - SUCCESS");
                             userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
                             window.localStorage.setItem("id", response.id);
                             window.localStorage.setItem("my_name", response.first_name + " " + response.last_name);
