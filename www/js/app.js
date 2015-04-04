@@ -93,7 +93,7 @@
             facebookConnectPlugin.browserInit(appId);
         }
         var getStatus = function () {
-            if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
+            if (typeof facebookConnectPlugin != 'undefined'){
             facebookConnectPlugin.getLoginStatus(
                     function (response) {
                         alert('Initial check - logged in');
