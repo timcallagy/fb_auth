@@ -171,6 +171,9 @@ function facebook_login(){
                     function (response) { 
                         console.log('success!');
                         window.location="#home/";
+                        facebookConnectPlugin.getAccessToken(function(token) {
+                               alert("Token: " + token);
+                        }
                     },
                     function (response) { 
                         window.location="#login/";
