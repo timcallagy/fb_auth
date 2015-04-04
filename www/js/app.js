@@ -96,14 +96,19 @@
             if (typeof facebookConnectPlugin != 'undefined'){
             facebookConnectPlugin.getLoginStatus(
                     function (response) {
-                        alert('Initial check - logged in');
                         alert(JSON.stringify(response));
-                        console.log('Logged in');
-                        console.log(response);
-                        //            window.location="#home/";
-                        homeView = new HomeView();
-                        homeView.render();
-                        slider.slidePage(homeView.$el);
+                        if (response.status == "unknown") {
+                            loginView = new LoginView();
+                            loginView.render();
+                            slider.slidePage(loginView.$el);
+                        } else {
+                            console.log('Logged in');
+                            console.log(response);
+                            //            window.location="#home/";
+                            homeView = new HomeView();
+                            homeView.render();
+                            slider.slidePage(homeView.$el);
+                        }       
                     },
                     function (response) { 
                         alert('Initial check - logged out');
