@@ -27,33 +27,28 @@ var HomeView = function (service) {
 
     this.initialize = function() {
         this.$el = $('<div/>');
-        function login() {
-            if (!window.cordova) {
-                var appId = prompt("Enter FB Application ID", "");
-                facebookConnectPlugin.browserInit(appId);
-            }
-            var checkFB = function(){
-                if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
-                    facebookConnectPlugin.login( ["email"],
-                          function (response) { 
-                              console.log('success!');
+        /*
+        var checkFB = function(){
+            if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
+                facebookConnectPlugin.login( ["email"],
+                        function (response) { 
+                            console.log('success!');
                             //window.location="#home/";
                             getStatus();
-                           },
-                            function (response) { 
+                        },
+                        function (response) { 
                             window.location="#login/";
-                          });
-                } else {
-                    console.log('FB NOT READY');
-                    setTimeout(checkFB, 500);
-                }
+                        });
+            } else {
+                console.log('FB NOT READY');
+                setTimeout(checkFB, 500);
             }
-            checkFB();
         }
-        login();
+        checkFB();
+        */
     };
     this.render = function() {
-        //getStatus();
+        getStatus();
         /*
            openFB.api({
            path: '/me',
