@@ -3,8 +3,8 @@ var HomeView = function (service) {
     self = this;
 
     var getStatus = function () {
-        facebookConnectPlugin.getLoginStatus(
-                function (response) {
+//        facebookConnectPlugin.getLoginStatus(
+  //              function (response) {
                     facebookConnectPlugin.api('/me', [],
                         function(response) {
                             userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
@@ -17,12 +17,12 @@ var HomeView = function (service) {
                             console.log(response);
                         }
                         );
-                },
-                function (response) { 
-                    console.log('error');
-                    alert(response);
-                    console.log(response);
-                });
+    //            },
+      //          function (response) { 
+        //            console.log('error');
+          //          alert(response);
+            //        console.log(response);
+             //   });
     }
 
     this.initialize = function() {
