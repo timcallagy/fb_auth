@@ -114,7 +114,7 @@
                     });
             } else {
                 console.log('FB NOT READY');
-                setTimeout(checkFB, 500);
+                setTimeout(getStatus, 500);
             }
         }
         getStatus();
