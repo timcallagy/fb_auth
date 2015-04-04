@@ -16,7 +16,6 @@ var HomeView = function (service) {
                         },
                         function(response) {
                             console.log(response);
-                            alert(response);
                         }
                         );
                 } else {

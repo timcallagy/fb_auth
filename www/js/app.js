@@ -96,7 +96,7 @@
             if (typeof facebookConnectPlugin != 'undefined'){
             facebookConnectPlugin.getLoginStatus(
                     function (response) {
-                        alert(JSON.stringify(response));
+                        //alert(JSON.stringify(response));
                         if (response.status == "unknown") {
                             loginView = new LoginView();
                             loginView.render();
@@ -111,8 +111,8 @@
                         }       
                     },
                     function (response) { 
-                        alert('Initial check - logged out');
-                        alert(response);
+                        //alert('Initial check - logged out');
+                        //alert(response);
                         //            window.location="#login/";
                         //slider.slidePage(new LoginView().render().$el);
                         loginView = new LoginView();
