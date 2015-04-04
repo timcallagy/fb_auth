@@ -18,30 +18,50 @@ var LoginView = function (service) {
             }
         });
         /*
-        function login() {
-            if (!window.cordova) {
-                var appId = prompt("Enter FB Application ID", "");
-                facebookConnectPlugin.browserInit(appId);
+        var checkFB = function(){
+            if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
+                facebookConnectPlugin.login( ["email"],
+                        function (response) { 
+                            console.log('success!');
+                            //window.location="#home/";
+                            getStatus();
+                        },
+                        function (response) { 
+                            console.log('failure!');
+                            window.location="#login/";
+                        });
+            } else {
+                console.log('FB NOT READY');
+                setTimeout(checkFB, 500);
             }
-            var checkFB = function(){
-                if (typeof facebookConnectPlugin != 'undefined'){
-                    facebookConnectPlugin.login( ["email"],
-                          function (response) { 
-                              console.log('success!');
-                            window.location="#home/";
-                           },
-                            function (response) { 
-                            self.render();
-                          });
-                } else {
-                    console.log('FB NOT READY');
-                    setTimeout(checkFB, 500);
-                }
-            }
-            checkFB();
         }
-        login();
+        checkFB();
         */
+        /*
+           function login() {
+           if (!window.cordova) {
+           var appId = prompt("Enter FB Application ID", "");
+           facebookConnectPlugin.browserInit(appId);
+           }
+           var checkFB = function(){
+           if (typeof facebookConnectPlugin != 'undefined'){
+           facebookConnectPlugin.login( ["email"],
+           function (response) { 
+           console.log('success!');
+           window.location="#home/";
+           },
+           function (response) { 
+           self.render();
+           });
+           } else {
+           console.log('FB NOT READY');
+           setTimeout(checkFB, 500);
+           }
+           }
+           checkFB();
+           }
+           login();
+           */
 
         /*
            openFB.init({appId: '1533444716908405'});

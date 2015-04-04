@@ -45,7 +45,7 @@
         router.addRoute('login/', function() {
             slider.slidePage(new LoginView().render().$el);
         });
-        router.addRoute('', function() {
+        router.addRoute('home/', function() {
             homeView = new HomeView();
             homeView.render();
             slider.slidePage(homeView.$el);
@@ -88,7 +88,35 @@
 
         router.start();
 
+        if (!window.cordova) {
+            var appId = prompt("Enter FB Application ID mofo", "");
+            facebookConnectPlugin.browserInit(appId);
+        }
+        var getStatus = function () {
+            facebookConnectPlugin.getLoginStatus(
+                    function (response) {
+                        alert('Initial check - logged in');
+                        alert(response);
+                        //            window.location="#home/";
+                        homeView = new HomeView();
+                        homeView.render();
+                        slider.slidePage(homeView.$el);
+                    },
+                    function (response) { 
+                        alert('Initial check - logged out');
+                        alert(response);
+                        //            window.location="#login/";
+                        //slider.slidePage(new LoginView().render().$el);
+                        loginView = new LoginView();
+                        loginView.render();
+                        slider.slidePage(loginView.$el);
+                    });
+        }
+        getStatus();
     });
+
+
+
     // This function must be structured this way to allow the button to fire multiple click events.
     $(function() {
         return $("body").on("click", "#add-gift-btn", function() {
@@ -123,6 +151,25 @@
         });
     });
 }());
+
+function facebook_login(){
+    var checkFB = function(){
+        if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
+            facebookConnectPlugin.login( ["email"],
+                    function (response) { 
+                        console.log('success!');
+                        window.location="#home/";
+                    },
+                    function (response) { 
+                        window.location="#login/";
+                    });
+        } else {
+            console.log('FB NOT READY');
+            setTimeout(checkFB, 500);
+        }
+    }
+    checkFB();
+}
 
 function delete_gift(pk) {
     gift = $("#gift-" + pk);
@@ -204,13 +251,13 @@ $(function() {
                             $('#processing-btn').hide();
                             console.log('Error');
                         } else {
-                          //  $('#payment-error').hide();
-                          //  $('#payment-failed-msg').hide();
-                          //  $('#pay-btn').hide();
-                          //  $('#processing-btn').hide();
+                            //  $('#payment-error').hide();
+                            //  $('#payment-failed-msg').hide();
+                            //  $('#pay-btn').hide();
+                            //  $('#processing-btn').hide();
                             // Prevent the user from going back. Force them to reload the page using the "Success" button.
-                           // $('#back-btn').hide();
-                           // $('[id^=success-btn]').show();
+                            // $('#back-btn').hide();
+                            // $('[id^=success-btn]').show();
                             window.localStorage.setItem("contribution", JSON.stringify(data));
                             window.location.redirect = "#payment-confirmation/";
                             href = window.location.href;
@@ -234,10 +281,10 @@ $(function() {
 
 function send_whatsapp(message) {
     window.plugins.socialsharing.shareViaWhatsApp(message, null /* img */, 'https://play.google.com/store/apps/details?id=co.giftmeapp.gift_me' /* url */, function() {
-        console.log('share ok')
-    }, 
-    function(errormsg){
-        alert(errormsg)
-    });
+            console.log('share ok')
+            }, 
+            function(errormsg){
+                alert(errormsg)
+            });
 }
 
