@@ -178,6 +178,7 @@ if (!window.cordova) {
             e.src = document.location.protocol + '//connect.facebook.net/en_US/sdk.js';
             e.async = true;
             document.getElementById('fb-root').appendChild(e);
+            alert('Facebook sdk added');
         }
     }());
 
