@@ -166,7 +166,7 @@
 
 function facebook_login(){
     var checkFB = function(){
-        if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
+        if (typeof facebookConnectPlugin != 'undefined'){
             facebookConnectPlugin.login( ["email"],
                     function (response) { 
                         console.log('success!');
