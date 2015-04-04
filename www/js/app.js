@@ -93,6 +93,7 @@
             facebookConnectPlugin.browserInit(appId);
         }
         var getStatus = function () {
+            if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
             facebookConnectPlugin.getLoginStatus(
                     function (response) {
                         alert('Initial check - logged in');
@@ -111,6 +112,10 @@
                         loginView.render();
                         slider.slidePage(loginView.$el);
                     });
+            } else {
+                console.log('FB NOT READY');
+                setTimeout(checkFB, 500);
+            }
         }
         getStatus();
     });
