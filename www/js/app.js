@@ -113,7 +113,7 @@
                         slider.slidePage(loginView.$el);
                     });
             } else {
-                console.log('FB NOT READY');
+                console.log('facebookConnectPlugin not ready');
                 setTimeout(getStatus, 500);
             }
         }
