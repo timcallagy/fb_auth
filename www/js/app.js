@@ -98,6 +98,8 @@
                     function (response) {
                         alert('Initial check - logged in');
                         alert(response);
+                        console.log('Logged in');
+                        console.log(response);
                         //            window.location="#home/";
                         homeView = new HomeView();
                         homeView.render();
