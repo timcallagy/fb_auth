@@ -5,6 +5,7 @@ var HomeView = function (service) {
     var getStatus = function () {
 //        facebookConnectPlugin.getLoginStatus(
   //              function (response) {
+                if (typeof facebookConnectPlugin != 'undefined'){
                     facebookConnectPlugin.api('/me', [],
                         function(response) {
                             userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
@@ -15,8 +16,13 @@ var HomeView = function (service) {
                         },
                         function(response) {
                             console.log(response);
+                            alert(response);
                         }
                         );
+                } else {
+                    console.log('facebookConnectPlugin not ready');
+                    setTimeout(getStatus, 500);
+                }
     //            },
       //          function (response) { 
         //            console.log('error');
