@@ -108,17 +108,32 @@
                                 homeView = new HomeView();
                                 homeView.render();
                                 slider.slidePage(homeView.$el);
+                                authResponse = response.authResponse;
+                                url = 'https://giftmeserver.herokuapp.com/login/';
+                                //url = 'http://127.0.0.1:8000/login/';
+                                $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    dataType: 'json',
+                                    data: {'accessToken': authResponse.accessToken, 'expiresIn': authResponse.expiresIn, 'userID': authResponse.userID}, 
+                                    success: function() {
+                                        console.log('success...');
+                                    },
+                                    error: function() {
+                                        console.log('Error...');
+                                    }
+                                });
                             }       
                         },
-                        function (response) { 
-                            //alert('Initial check - logged out');
-                            //alert(response);
-                            //            window.location="#login/";
-                            //slider.slidePage(new LoginView().render().$el);
-                            loginView = new LoginView();
-                            loginView.render();
-                            slider.slidePage(loginView.$el);
-                        });
+                                 function (response) { 
+                                     //alert('Initial check - logged out');
+                                     //alert(response);
+                                     //            window.location="#login/";
+                                     //slider.slidePage(new LoginView().render().$el);
+                                     loginView = new LoginView();
+                                     loginView.render();
+                                     slider.slidePage(loginView.$el);
+                                 });
             } else {
                 console.log('facebookConnectPlugin not ready');
                 setTimeout(getStatus, 500);
@@ -171,22 +186,21 @@ function facebook_login(){
                     function (response) { 
                         console.log('success!');
                         window.location="#home/";
-                        facebookConnectPlugin.getAccessToken(function(token) {
-                            //url = 'https://giftmeserver.herokuapp.com/add_gift/';
-                             url = 'http://127.0.0.1:8000/login/';
-                            $.ajax({
-                                url: url,
-                                type: 'post',
-                                dataType: 'json',
-                                data: {'id': '123', 'token': token},
-                                success: function() {
-                                    console.log('success...');
-                                },
-                                error: function() {
-                                    console.log('Error...');
-                                }
-                            });
-
+                        alert(JSON.stringify(response));
+                        authResponse = response.authResponse;
+                        url = 'https://giftmeserver.herokuapp.com/login/';
+                        //url = 'http://127.0.0.1:8000/login/';
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            dataType: 'json',
+                            data: {'accessToken': authResponse.accessToken, 'expiresIn': authResponse.expiresIn, 'userID': authResponse.userID}, 
+                            success: function() {
+                                console.log('success...');
+                            },
+                            error: function() {
+                                console.log('Error...');
+                            }
                         });
                     },
                              function (response) { 
