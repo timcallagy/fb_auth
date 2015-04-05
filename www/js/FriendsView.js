@@ -8,7 +8,7 @@ var FriendsView = function (service) {
 
     this.render = function() {
         if (typeof facebookConnectPlugin != 'undefined'){
-            facebookConnectPlugin.api('/me/friends?fields=name', ['basic_info', 'user_friends'],
+            facebookConnectPlugin.api('/me/friends', [],
                     function(response) {
                         self.$el.html(self.template(response.data));
                         window.localStorage.setItem("friends", JSON.stringify(response.data));
