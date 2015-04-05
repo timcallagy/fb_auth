@@ -94,31 +94,31 @@
         }
         var getStatus = function () {
             if (typeof facebookConnectPlugin != 'undefined'){
-            facebookConnectPlugin.getLoginStatus(
-                    function (response) {
-                        //alert(JSON.stringify(response));
-                        if (response.status == "unknown") {
+                facebookConnectPlugin.getLoginStatus(
+                        function (response) {
+                            //alert(JSON.stringify(response));
+                            if (response.status == "unknown") {
+                                loginView = new LoginView();
+                                loginView.render();
+                                slider.slidePage(loginView.$el);
+                            } else {
+                                console.log('Logged in');
+                                console.log(response);
+                                //            window.location="#home/";
+                                homeView = new HomeView();
+                                homeView.render();
+                                slider.slidePage(homeView.$el);
+                            }       
+                        },
+                        function (response) { 
+                            //alert('Initial check - logged out');
+                            //alert(response);
+                            //            window.location="#login/";
+                            //slider.slidePage(new LoginView().render().$el);
                             loginView = new LoginView();
                             loginView.render();
                             slider.slidePage(loginView.$el);
-                        } else {
-                            console.log('Logged in');
-                            console.log(response);
-                            //            window.location="#home/";
-                            homeView = new HomeView();
-                            homeView.render();
-                            slider.slidePage(homeView.$el);
-                        }       
-                    },
-                    function (response) { 
-                        //alert('Initial check - logged out');
-                        //alert(response);
-                        //            window.location="#login/";
-                        //slider.slidePage(new LoginView().render().$el);
-                        loginView = new LoginView();
-                        loginView.render();
-                        slider.slidePage(loginView.$el);
-                    });
+                        });
             } else {
                 console.log('facebookConnectPlugin not ready');
                 setTimeout(getStatus, 500);
@@ -172,12 +172,26 @@ function facebook_login(){
                         console.log('success!');
                         window.location="#home/";
                         facebookConnectPlugin.getAccessToken(function(token) {
-                               alert("Token: " + token);
-                        }
+                            //url = 'https://giftmeserver.herokuapp.com/add_gift/';
+                             url = 'http://127.0.0.1:8000/login/';
+                            $.ajax({
+                                url: url,
+                                type: 'post',
+                                dataType: 'json',
+                                data: {'id': '123', 'token': token},
+                                success: function() {
+                                    console.log('success...');
+                                },
+                                error: function() {
+                                    console.log('Error...');
+                                }
+                            });
+
+                        });
                     },
-                    function (response) { 
-                        window.location="#login/";
-                    });
+                             function (response) { 
+                                 window.location="#login/";
+                             });
         } else {
             console.log('FB NOT READY');
             setTimeout(checkFB, 500);
