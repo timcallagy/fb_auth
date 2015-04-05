@@ -3,57 +3,60 @@ var HomeView = function (service) {
     self = this;
 
     var getStatus = function () {
-//        facebookConnectPlugin.getLoginStatus(
-  //              function (response) {
-                if (typeof facebookConnectPlugin != 'undefined'){
-                    facebookConnectPlugin.api('/me', [],
-                        function(response) {
-                            userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
-                            window.localStorage.setItem("id", response.id);
-                            window.localStorage.setItem("my_name", response.first_name + " " + response.last_name);
-                            self.$el.html(self.template(response));
-                            return self;
-                        },
-                        function(response) {
-                            console.log(response);
-                        }
-                        );
-                } else {
-                    console.log('facebookConnectPlugin not ready');
-                    setTimeout(getStatus, 500);
-                }
-    //            },
-      //          function (response) { 
+        //        facebookConnectPlugin.getLoginStatus(
+        //              function (response) {
+        //            },
+        //          function (response) { 
         //            console.log('error');
-          //          alert(response);
-            //        console.log(response);
-             //   });
+        //          alert(response);
+        //        console.log(response);
+        //   });
     }
 
     this.initialize = function() {
         this.$el = $('<div/>');
         /*
-        var checkFB = function(){
-            if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
-                facebookConnectPlugin.login( ["email"],
-                        function (response) { 
-                            console.log('success!');
-                            //window.location="#home/";
-                            getStatus();
-                        },
-                        function (response) { 
-                            window.location="#login/";
-                        });
-            } else {
-                console.log('FB NOT READY');
-                setTimeout(checkFB, 500);
-            }
+           var checkFB = function(){
+           if (typeof facebookConnectPlugin != 'undefined' && typeof FB != 'undefined'){
+           facebookConnectPlugin.login( ["email"],
+           function (response) { 
+           console.log('success!');
+        //window.location="#home/";
+        getStatus();
+        },
+        function (response) { 
+        window.location="#login/";
+        });
+        } else {
+        console.log('FB NOT READY');
+        setTimeout(checkFB, 500);
+        }
         }
         checkFB();
         */
     };
     this.render = function() {
-        getStatus();
+        //        getStatus();
+        if (typeof facebookConnectPlugin != 'undefined'){
+            facebookConnectPlugin.api('/me', [],
+                    function(response) {
+                        userPic = 'http://graph.facebook.com/' + response.id + '/picture?type=small';
+                        window.localStorage.setItem("id", response.id);
+                        window.localStorage.setItem("my_name", response.first_name + " " + response.last_name);
+                        self.$el.html(self.template(response));
+                        return self;
+                    },
+                    function(response) {
+                        console.log(response);
+                    }
+                    );
+        } else {
+            console.log('facebookConnectPlugin not ready');
+            setTimeout(getStatus, 500);
+        }
+
+
+
         /*
            openFB.api({
            path: '/me',

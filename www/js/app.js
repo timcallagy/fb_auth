@@ -1,31 +1,6 @@
 // We use an "Immediate Function" to initialize the application to avoid leaving anything behind in the global scope
 (function () {
 
-    /* --------------------------------- Event Registration -------------------------------- */
-    document.addEventListener('deviceready', function() {
-
-        // These lines fix the iOS7 status bar problem
-        StatusBar.overlaysWebView( false );
-        StatusBar.backgroundColorByHexString('#ffffff');
-        StatusBar.styleDefault();       
-
-        // This makes the app react faster to clicks
-        FastClick.attach(document.body);
-
-        if (navigator.notification) {
-            window.alert = function (message) {
-                navigator.notification.alert(
-                    message,    // message
-                    null,       // callback
-                    "Workshop", // title
-                    'OK'        // buttonName
-                    );
-            };
-        }
-
-    }, false);
-
-
     /* ---------------------------------- Local Variables ---------------------------------- */
     LoginView.prototype.template = Handlebars.compile($("#login-tpl").html());
     HomeView.prototype.template = Handlebars.compile($("#home-tpl").html());
@@ -61,7 +36,9 @@
             slider.slidePage(contributionsView.$el);
         });
         router.addRoute('friends/', function() {
-            slider.slidePage(new FriendsView(service).render().$el);
+            friendsView = new FriendsView();
+            friendsView.render();
+            slider.slidePage(friendsView.$el);
         });
         router.addRoute('friend-wishlist/:id/', function(id) {
             friendWishlistView = new FriendWishlistView(id);
@@ -89,22 +66,18 @@
         router.start();
 
         if (!window.cordova) {
-            var appId = prompt("Enter FB Application ID mofo", "");
+            var appId = prompt("Enter FB Application ID", "");
             facebookConnectPlugin.browserInit(appId);
         }
         var getStatus = function () {
             if (typeof facebookConnectPlugin != 'undefined'){
                 facebookConnectPlugin.getLoginStatus(
                         function (response) {
-                            //alert(JSON.stringify(response));
                             if (response.status == "unknown") {
                                 loginView = new LoginView();
                                 loginView.render();
                                 slider.slidePage(loginView.$el);
                             } else {
-                                console.log('Logged in');
-                                console.log(response);
-                                //            window.location="#home/";
                                 homeView = new HomeView();
                                 homeView.render();
                                 slider.slidePage(homeView.$el);
@@ -126,10 +99,6 @@
                             }       
                         },
                                  function (response) { 
-                                     //alert('Initial check - logged out');
-                                     //alert(response);
-                                     //            window.location="#login/";
-                                     //slider.slidePage(new LoginView().render().$el);
                                      loginView = new LoginView();
                                      loginView.render();
                                      slider.slidePage(loginView.$el);
@@ -142,6 +111,29 @@
         getStatus();
     });
 
+    /* --------------------------------- Event Registration -------------------------------- */
+    document.addEventListener('deviceready', function() {
+
+        // These lines fix the iOS7 status bar problem
+        StatusBar.overlaysWebView( false );
+        StatusBar.backgroundColorByHexString('#ffffff');
+        StatusBar.styleDefault();       
+
+        // This makes the app react faster to clicks
+        FastClick.attach(document.body);
+
+        if (navigator.notification) {
+            window.alert = function (message) {
+                navigator.notification.alert(
+                    message,    // message
+                    null,       // callback
+                    "Workshop", // title
+                    'OK'        // buttonName
+                    );
+            };
+        }
+
+    }, false);
 
 
     // This function must be structured this way to allow the button to fire multiple click events.
@@ -178,7 +170,7 @@
         });
     });
 }());
-
+/*
 function facebook_login(){
     var checkFB = function(){
         if (typeof facebookConnectPlugin != 'undefined'){
@@ -186,7 +178,6 @@ function facebook_login(){
                     function (response) { 
                         console.log('success!');
                         window.location="#home/";
-                        alert(JSON.stringify(response));
                         authResponse = response.authResponse;
                         url = 'https://giftmeserver.herokuapp.com/login/';
                         //url = 'http://127.0.0.1:8000/login/';
@@ -321,13 +312,14 @@ $(function() {
         }
     });
 });
-
 function send_whatsapp(message) {
-    window.plugins.socialsharing.shareViaWhatsApp(message, null /* img */, 'https://play.google.com/store/apps/details?id=co.giftmeapp.gift_me' /* url */, function() {
+*/
+ //   window.plugins.socialsharing.shareViaWhatsApp(message, null /* img */, 'https://play.google.com/store/apps/details?id=co.giftmeapp.gift_me' /* url */, function() {
+    /*
             console.log('share ok')
             }, 
             function(errormsg){
                 alert(errormsg)
             });
 }
-
+*/
