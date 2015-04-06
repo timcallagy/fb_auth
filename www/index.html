@@ -25,7 +25,7 @@
 <div class="text-center">
 <ul class="table-view">
   <li class="table-view-cell media">
-      <img class="media-object emp-pic" src="http://graph.facebook.com/{{ id }}/picture?width=150&height=150"><br>
+      <img class="media-object emp-pic" src="http://graph.facebook.com/{{ id }}/picture?width=120&height=120"><br>
       <div class="media-body">
           Hey {{ first_name }}!
           <p>Welcome to GiftMe</p>
@@ -98,7 +98,7 @@ Add item
                         {{this.fields.name}}
                     </a>
                     <p>Price: ${{ this.fields.price }}</p>
-                        <p>Crowfunded: ${{ this.fields.crowdfunded }}</p>
+                        <p>Crowdfunded: ${{ this.fields.crowdfunded }}</p>
                     {{#check_if_zero this.fields.crowdfunded}}
                         <form id="delete-gift{{this.pk}}-form" action="#" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                         </form>
@@ -129,8 +129,10 @@ Add item
 <h4 class="text-center">Add an Item</h4>
 <div id="add-gift-holder>
 <form id="add-gift-form" action="" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+    <button id="add-error" class="btn btn-outlined btn-negative" style="display:none;">Error! Something went wrong with GiftMe!.</button>
 <p>Name:</>
   <input id="gift-name" name="name" type="text" placeholder="e.g. Sportmax Pro Inline Roller Skates">
+    <button id="url-error" class="btn btn-outlined btn-negative" style="display:none;">Error! This is not a valid link.</button>
 <p>Link:</>
   <input id="gift-url" name="url" type="text" placeholder="e.g. http://www.amazon.co.uk/Kingdom-Sportmax-Inline-Roller-Skates/dp/B00PZ1TWU8/ref=sr_1_4?ie=UTF8&qid=1426610093&sr=8-4&keywords=rollerblades">
 
@@ -236,7 +238,7 @@ Add item
                         {{fields.name}}
                     </a>
                     <p>Price: ${{ fields.price }}</p>
-                    <p>Crowfunded: ${{ fields.crowdfunded }}</p>
+                    <p>Crowdfunded: ${{ fields.crowdfunded }}</p>
                     <a href="#pay-page/{{ fields.owner_id }}/{{ pk }}/"><button class="btn btn-primary">Chip In</button></a>
                 </div>
         </li>
@@ -472,7 +474,6 @@ Add item
 <!--cordova.js is automatically injected by the Cordova build process-->
 <script src="cordova.js"></script>
 <script src="js/jquery.js"></script>
-<!--<script src="js/openfb.js"></script>-->
 <script type="text/javascript" src="js/facebookConnectPlugin.js"></script>
 <script src="js/pageslider.js"></script>
 <script src="js/router.js"></script>

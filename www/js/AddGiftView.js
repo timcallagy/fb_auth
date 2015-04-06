@@ -6,50 +6,46 @@ var AddGiftView = function (service) {
         this.$el = $('<div/>');
     };
 
-
     this.render = function() {
 
-        //var add_gift_form = $('#add-gift-form');
-        // This function must be structured this way to allow the button to fire multiple click events.
-        //$(function() {
-        //    return $("body").on("click", "#add-gift-btn", function() {
-
-        //function add_gift() {
         $(function() {
             return $("body").on("click", "#add-gift-btn", function() {
                 name = $('#gift-name').val();
                 price = $('#gift-price').val();
                 url = $('#gift-url').val();
                 owner_id = $('#gift-owner-id').val();
+                accessToken = window.localStorage.getItem("accessToken");
+                userID = window.localStorage.getItem("userID");
                 $.ajax({
                     url: backend_url + 'add_gift/',
                     type: 'post',
                     dataType: 'json',
-                    data: {name: name, url: url, price: price, owner_id: owner_id},
+                    data: {name: name, url: url, price: price, owner_id: owner_id, accessToken: accessToken, userID: userID},
                     success: function(data) {
                         // data == false if the gift was not successfully added.
                         if (data == false ) {
-                            $('#price-error').show();
+                            $('#add-error').show();
                         } else {
+                            $('#add-error').hide();
+                            $('#url-error').hide();
                             $('#price-error').hide();
-                            // Reload so that the form can be submitted again.
-                            /*
-                               addGiftView = new AddGiftView();
-                               addGiftView.render();
-                               slider.slidePage(addGiftView.$el);
-                               window.location.redirect = "#wishlist/";
-                               href = window.location.href;
-                               window.location.href = href.slice(0, href.indexOf("#")) + "#wishlist/";
-                               window.location.reload();
-                               */
                             window.location = "#wishlist/";
-                            //$('#add-gift-form').remove();
-                            //$('#add-gift-holder').append(add_gift_form);
-
                         }
                     },
-                    error: function() {
-                        console.log('Error');
+                    error: function(response) {
+                        if (response.responseText == "Invalid URL") {
+                            $('#add-error').hide();
+                            $('#url-error').show();
+                            $('#price-error').hide();
+                        } else if (response.responseText == "Invalid amount") {
+                            $('#add-error').hide();
+                            $('#url-error').hide();
+                            $('#price-error').show();
+                        } else {
+                            $('#add-error').show();
+                            $('#url-error').hide();
+                            $('#price-error').hide();
+                        }
                     }
                 });
             });
@@ -65,4 +61,4 @@ var AddGiftView = function (service) {
         alert(error.message);
     }
 
-    }
+}

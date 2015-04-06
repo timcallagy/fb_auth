@@ -14,10 +14,27 @@ var WishlistView = function (service) {
     };
 
     this.render = function() {
-        id = window.localStorage.getItem("id");
-        //url = "https://giftmeserver.herokuapp.com/get_gifts/";
-        //url = "http://127.0.0.1:8000/get_gifts/";
-        $.get(backend_url + "get_gifts/" + id + "/", function( data ) {
+        userID = window.localStorage.getItem("id");
+        function delete_gift(pk) {
+            gift = $("#gift-" + pk);
+            accessToken = window.localStorage.getItem("accessToken");
+            $.ajax({
+                url: backend_url + "delete_gift/" + pk + "/",
+                type: 'post',
+                data: {'accessToken': accessToken, 'userID': userID},
+                success: function() {
+                    gift.remove();
+                    console.log('Success');
+                    console.log(gift);
+                },
+                error: function() {
+                    gift.hide();
+                    console.log('Error');
+                    console.log(gift);
+                }
+            });
+        }
+        $.get(backend_url + "get_gifts/" + userID + "/", function( data ) {
             window.localStorage.setItem("gifts", data);
             data = JSON.parse(data);
             self.$el.html(self.template(data));
