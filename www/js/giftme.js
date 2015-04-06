@@ -1,11 +1,11 @@
 // If we are running in the live environment, use these variables.
 if (!window.cordova) {
-    var backend_url = 'https://giftmeserver.herokuapp.com/'; 
-    Stripe.setPublishableKey('pk_live_rzB00nH8Ua6HTGoh77BGXtuy');
-// else, use these variables.
-} else {
     var backend_url = 'http://127.0.0.1:8000/';
     Stripe.setPublishableKey('pk_test_iQi63h5Zd5LyKJGOMGUYxRvp');
+// else, use these variables.
+} else {
+    var backend_url = 'https://giftmeserver.herokuapp.com/'; 
+    Stripe.setPublishableKey('pk_live_rzB00nH8Ua6HTGoh77BGXtuy');
 }
 
 var add_gift_form = $('#add-gift-form');
