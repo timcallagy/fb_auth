@@ -1,7 +1,12 @@
-//var backend_url = 'https://giftmeserver.herokuapp.com/'; 
-var backend_url = 'http://127.0.0.1:8000/';
-//Stripe.setPublishableKey('pk_live_rzB00nH8Ua6HTGoh77BGXtuy');
-Stripe.setPublishableKey('pk_test_iQi63h5Zd5LyKJGOMGUYxRvp');
+// If we are running in the live environment, use these variables.
+if (!window.cordova) {
+    var backend_url = 'https://giftmeserver.herokuapp.com/'; 
+    Stripe.setPublishableKey('pk_live_rzB00nH8Ua6HTGoh77BGXtuy');
+// else, use these variables.
+} else {
+    var backend_url = 'http://127.0.0.1:8000/';
+    Stripe.setPublishableKey('pk_test_iQi63h5Zd5LyKJGOMGUYxRvp');
+}
 
 var add_gift_form = $('#add-gift-form');
 // This function must be structured this way to allow the button to fire multiple click events.
