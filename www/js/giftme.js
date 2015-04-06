@@ -1,32 +1,83 @@
+//var backend_url = 'https://giftmeserver.herokuapp.com/'; 
+var backend_url = 'http://127.0.0.1:8000/';
+//Stripe.setPublishableKey('pk_live_rzB00nH8Ua6HTGoh77BGXtuy');
+Stripe.setPublishableKey('pk_test_iQi63h5Zd5LyKJGOMGUYxRvp');
 
-var backend_url = 'https://giftmeserver.herokuapp.com/'; 
-//var backend_url = 'http://127.0.0.1:8000/';
+var add_gift_form = $('#add-gift-form');
+// This function must be structured this way to allow the button to fire multiple click events.
+//$(function() {
+//    return $("body").on("click", "#add-gift-btn", function() {
+
+//function add_gift() {
+$(function() {
+    return $("body").on("click", "#add-gift-btn", function() {
+        //    form = $('#add-gift-form').serialize();
+        //url = 'https://giftmeserver.herokuapp.com/add_gift/';
+        // url = 'http://127.0.0.1:8000/add_gift/';
+        
+        name = $('#gift-name').val();
+        //name = document.getElementById('gift-name').value;
+        console.log(name);
+        price = $('#gift-price').val();
+        url = $('#gift-url').val();
+        owner_id = $('#gift-owner-id').val();
+        $.ajax({
+            url: backend_url + 'add_gift/',
+            type: 'post',
+            dataType: 'json',
+            data: {name: name, url: url, price: price, owner_id: owner_id},
+            success: function(data) {
+                // data == false if the gift was not successfully added.
+                if (data == false ) {
+                    $('#price-error').show();
+                } else {
+                    $('#price-error').hide();
+                    // Reload so that the form can be submitted again.
+                    /*
+                       addGiftView = new AddGiftView();
+                       addGiftView.render();
+                       slider.slidePage(addGiftView.$el);
+                       window.location.redirect = "#wishlist/";
+                       href = window.location.href;
+                       window.location.href = href.slice(0, href.indexOf("#")) + "#wishlist/";
+                       window.location.reload();
+                       */
+                    window.location = "#wishlist/";
+                    $('#add-gift-form').remove();
+                    $('#add-gift-holder').append(add_gift_form);
+
+                }
+            },
+            error: function() {
+                console.log('Error');
+            }
+        });
+    });
+});
 
 function facebook_login(){
     var checkFB = function(){
         if (typeof facebookConnectPlugin != 'undefined'){
-            facebookConnectPlugin.login( ["email"],
+            facebookConnectPlugin.login( ["email", "user_friends"],
                     function (response) { 
                         window.location="#home/";
                         authResponse = response.authResponse;
-                        //url = 'https://giftmeserver.herokuapp.com/login/';
-                        //url = 'http://127.0.0.1:8000/login/';
+                        window.localStorage.setItem("accessToken", authResponse.accessToken);
+                        window.localStorage.setItem("userID", authResponse.userID);
                         $.ajax({
                             url: backend_url + 'login/',
                             type: 'post',
                             dataType: 'json',
                             data: {'accessToken': authResponse.accessToken, 'expiresIn': authResponse.expiresIn, 'userID': authResponse.userID}, 
                             success: function() {
-                                console.log('success...');
                             },
                             error: function() {
-                                console.log('Error...');
                             }
                         });
                     },
-                             function (response) { 
-                                 window.location="#login/";
-                             });
+                    function (response) { 
+                        window.location="#login/";
+                    });
         } else {
             console.log('FB NOT READY');
             setTimeout(checkFB, 500);
@@ -37,13 +88,12 @@ function facebook_login(){
 
 function delete_gift(pk) {
     gift = $("#gift-" + pk);
-    form = $("#delete-gift" + pk + "-form");
-    //url = "https://giftmeserver.herokuapp.com/delete_gift/";
-    //url = "http://127.0.0.1:8000/delete_gift/";
+    accessToken = window.localStorage.getItem("accessToken");
+    userID = window.localStorage.getItem("userID");
     $.ajax({
         url: backend_url + "delete_gift/" + pk + "/",
         type: 'post',
-        data: form,
+        data: {'accessToken': accessToken, 'userID': userID},
         success: function() {
             gift.hide();
             console.log('Success');
@@ -57,8 +107,6 @@ function delete_gift(pk) {
     });
 }
 
-//Stripe.setPublishableKey('pk_test_iQi63h5Zd5LyKJGOMGUYxRvp');
-Stripe.setPublishableKey('pk_live_rzB00nH8Ua6HTGoh77BGXtuy');
 // This function must be structured this way to allow the button to fire multiple click events.
 $(function() {
     return $("body").on("click", "#pay-btn", function() {
@@ -77,8 +125,6 @@ $(function() {
         card_cvc = $('#card-cvc').val();
         expiry_month = $('#expiry-month').val();
         expiry_year = $('#expiry-year').val();
-        gift_pk = $('#gift-pk').val();
-        friend_id = $('#friend-id').val();
 
         Stripe.card.createToken({
             number: card_number,
@@ -97,16 +143,16 @@ $(function() {
             } else {
                 var token = response.id;
                 var contributor_id = localStorage.getItem("id");
+                var accessToken = localStorage.getItem("accessToken");
                 var contributor_name = localStorage.getItem("my_name");
-                //url = 'https://giftmeserver.herokuapp.com/pay/' + gift_pk + '/';
-                //url = 'http://127.0.0.1:8000/pay/' + gift_pk + '/';
+                gift_pk = $('#gift-pk').val();
+                friend_id = $('#friend-id').val();
                 $.ajax({
                     url: backend_url + 'pay/' + gift_pk + '/',
                     type: 'post',
                     dataType: 'json',
-                    data: {token: token, amount: amount, message: message, card_number: card_number, card_cvc: card_cvc, expiry_month: expiry_month, expiry_year: expiry_year, contributor_id: contributor_id, contributor_name: encodeURI(contributor_name), timestamp: Date.now()},
+                    data: {token: token, amount: amount, message: message, card_number: card_number, card_cvc: card_cvc, expiry_month: expiry_month, expiry_year: expiry_year, contributor_id: contributor_id, contributor_name: encodeURI(contributor_name), accessToken: accessToken, timestamp: Date.now()},
                     success: function(data) {
-                        // data == false if the payment was not successfully made.
                         if (data.indexOf('Error') > -1) {
                             $('#payment-failed-msg').show();
                             $('#payment-error').html("Something went wrong at GiftMe");
@@ -115,18 +161,12 @@ $(function() {
                             $('#processing-btn').hide();
                             console.log('Error');
                         } else {
-                            //  $('#payment-error').hide();
-                            //  $('#payment-failed-msg').hide();
-                            //  $('#pay-btn').hide();
-                            //  $('#processing-btn').hide();
-                            // Prevent the user from going back. Force them to reload the page using the "Success" button.
-                            // $('#back-btn').hide();
-                            // $('[id^=success-btn]').show();
                             window.localStorage.setItem("contribution", JSON.stringify(data));
-                            window.location.redirect = "#payment-confirmation/";
-                            href = window.location.href;
-                            window.location.href = href.slice(0, href.indexOf("#")) + "#payment-confirmation/";
-                            window.location.reload();
+                            window.location = "#payment-confirmation/";
+                            //window.location.redirect = "#payment-confirmation/";
+                            //href = window.location.href;
+                            //window.location.href = href.slice(0, href.indexOf("#")) + "#payment-confirmation/";
+                            //window.location.reload();
                         }
                     },
                     error: function() {

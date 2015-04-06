@@ -66,8 +66,16 @@
         router.start();
 
         if (!window.cordova) {
-            var appId = prompt("Enter FB Application ID", "");
-            facebookConnectPlugin.browserInit(appId);
+//            var appId = prompt("Enter FB Application ID", "");
+  //          facebookConnectPlugin.browserInit(appId);
+        var init = function () {
+            if (typeof facebookConnectPlugin != 'undefined'){
+                facebookConnectPlugin.browserInit('1533444716908405');
+            } else {
+                setTimeout(init, 500);
+            }
+        }
+        setTimeout(init, 3000);
         }
         var getStatus = function () {
             if (typeof facebookConnectPlugin != 'undefined'){
@@ -82,10 +90,12 @@
                                 homeView.render();
                                 slider.slidePage(homeView.$el);
                                 authResponse = response.authResponse;
-                                url = 'https://giftmeserver.herokuapp.com/login/';
+                                window.localStorage.setItem("accessToken", authResponse.accessToken);
+                                window.localStorage.setItem("userID", authResponse.userID);
+                                //url = 'https://giftmeserver.herokuapp.com/login/';
                                 //url = 'http://127.0.0.1:8000/login/';
                                 $.ajax({
-                                    url: url,
+                                    url: backend_url + 'login/',
                                     type: 'post',
                                     dataType: 'json',
                                     data: {'accessToken': authResponse.accessToken, 'expiresIn': authResponse.expiresIn, 'userID': authResponse.userID}, 
@@ -135,7 +145,7 @@
 
     }, false);
 
-
+/*
     // This function must be structured this way to allow the button to fire multiple click events.
     $(function() {
         return $("body").on("click", "#add-gift-btn", function() {
@@ -169,6 +179,7 @@
             });
         });
     });
+    */
 }());
 /*
 function facebook_login(){
