@@ -7,59 +7,6 @@ if (!window.cordova) {
     var backend_url = 'https://giftmeserver.herokuapp.com/'; 
     Stripe.setPublishableKey('pk_live_rzB00nH8Ua6HTGoh77BGXtuy');
 }
-
-var add_gift_form = $('#add-gift-form');
-// This function must be structured this way to allow the button to fire multiple click events.
-//$(function() {
-//    return $("body").on("click", "#add-gift-btn", function() {
-
-//function add_gift() {
-$(function() {
-    return $("body").on("click", "#add-gift-btn", function() {
-        //    form = $('#add-gift-form').serialize();
-        //url = 'https://giftmeserver.herokuapp.com/add_gift/';
-        // url = 'http://127.0.0.1:8000/add_gift/';
-        
-        name = $('#gift-name').val();
-        //name = document.getElementById('gift-name').value;
-        console.log(name);
-        price = $('#gift-price').val();
-        url = $('#gift-url').val();
-        owner_id = $('#gift-owner-id').val();
-        $.ajax({
-            url: backend_url + 'add_gift/',
-            type: 'post',
-            dataType: 'json',
-            data: {name: name, url: url, price: price, owner_id: owner_id},
-            success: function(data) {
-                // data == false if the gift was not successfully added.
-                if (data == false ) {
-                    $('#price-error').show();
-                } else {
-                    $('#price-error').hide();
-                    // Reload so that the form can be submitted again.
-                    /*
-                       addGiftView = new AddGiftView();
-                       addGiftView.render();
-                       slider.slidePage(addGiftView.$el);
-                       window.location.redirect = "#wishlist/";
-                       href = window.location.href;
-                       window.location.href = href.slice(0, href.indexOf("#")) + "#wishlist/";
-                       window.location.reload();
-                       */
-                    window.location = "#wishlist/";
-                    $('#add-gift-form').remove();
-                    $('#add-gift-holder').append(add_gift_form);
-
-                }
-            },
-            error: function() {
-                console.log('Error');
-            }
-        });
-    });
-});
-
 function facebook_login(){
     var checkFB = function(){
         if (typeof facebookConnectPlugin != 'undefined'){
@@ -100,7 +47,7 @@ function delete_gift(pk) {
         type: 'post',
         data: {'accessToken': accessToken, 'userID': userID},
         success: function() {
-            gift.hide();
+            gift.remove();
             console.log('Success');
             console.log(gift);
         },
